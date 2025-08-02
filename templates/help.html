@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}Help Guide - MCP Web App{% endblock %}
+
+{% block content %}
+<h2>🛠️ How to Use MCP Learning Path Generator</h2>
+<hr>
+
+<h4>1️⃣ Get Your Google Gemini API Key</h4>
+<ol>
+  <li>Go to <a href="https://aistudio.google.com/app/apikey" target="_blank">Google AI Studio</a>.</li>
+  <li>Login with your Google account.</li>
+  <li>Click "Create API Key" and copy it.</li>
+  <li>Paste this in the dashboard the first time. It will be saved for you.</li>
+</ol>
+
+<h4>2️⃣ Create Pipedream URLs</h4>
+<ul>
+  <li>Login or sign up at <a href="https://pipedream.com" target="_blank">pipedream.com</a>.</li>
+  <li>Create a new HTTP-triggered workflow.</li>
+  <li>Copy the URL shown at the top (something like <code>https://example.m.pipedream.net</code>).</li>
+  <li>Create separate URLs for:
+    <ul>
+      <li>YouTube (required)</li>
+      <li>Google Drive (optional)</li>
+      <li>Notion (optional)</li>
+    </ul>
+  </li>
+</ul>
+
+<h4>3️⃣ Saving Details</h4>
+<p>The first time you use the app:</p>
+<ul>
+  <li>Paste your Gemini API key and all URLs</li>
+  <li>They will be saved automatically under your login</li>
+  <li>From next time, just enter your learning goal — everything else is reused</li>
+</ul>
+
+<h4>4️⃣ Example Prompt</h4>
+<p>"I want to learn Python basics in 7 days"</p>
+<p>"Help me understand AI fundamentals in 5 days"</p>
+
+<a href="/dashboard" class="btn btn-primary mt-3">Back to Dashboard</a>
+{% endblock %}

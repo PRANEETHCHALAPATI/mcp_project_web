@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: mcp-ai-path-generator
+    env: python
+    buildCommand: ""
+    startCommand: py app.py
+    envVars:
+      - key: FLASK_ENV
+        value: production
+    autoDeploy: true

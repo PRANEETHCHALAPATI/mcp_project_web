@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}API & Tool Configuration - MCP{% endblock %}
+
+{% block content %}
+<h2>🔧 Manage Your Configuration</h2>
+<p >You can update your saved Gemini API key and Pipedream URLs below.</p>
+
+<form method="post" id="configForm">
+  <div class="mb-3">
+    <label for="google_api_key" class="form-label">Gemini API Key</label>
+    <input type="password" name="google_api_key" id="google_api_key" class="form-control" value="{{ config[1] if config else '' }}" required>
+  </div>
+
+  <div class="mb-3 form-check">
+    <input class="form-check-input" type="checkbox" id="youtube_enabled" name="youtube_enabled" checked disabled>
+    <label class="form-check-label" for="youtube_enabled">Enable YouTube</label>
+  </div>
+  <div class="mb-3">
+    <label for="youtube_url" class="form-label">YouTube Pipedream URL</label>
+    <input type="text" name="youtube_url" id="youtube_url" class="form-control" value="{{ config[2] if config else '' }}" required>
+  </div>
+
+  <div class="mb-3 form-check">
+    <input class="form-check-input" type="checkbox" id="drive_enabled" name="drive_enabled" {% if config and config[3] %}checked{% endif %}>
+    <label class="form-check-label" for="drive_enabled">Enable Google Drive</label>
+  </div>
+  <div class="mb-3" id="drive_section" style="display: none;">
+    <label for="drive_url" class="form-label">Drive Pipedream URL</label>
+    <input type="text" name="drive_url" id="drive_url" class="form-control" value="{{ config[3] if config else '' }}">
+  </div>
+
+  <div class="mb-3 form-check">
+    <input class="form-check-input" type="checkbox" id="notion_enabled" name="notion_enabled" {% if config and config[4] %}checked{% endif %}>
+    <label class="form-check-label" for="notion_enabled">Enable Notion</label>
+  </div>
+  <div class="mb-3" id="notion_section" style="display: none;">
+    <label for="notion_url" class="form-label">Notion Pipedream URL</label>
+    <input type="text" name="notion_url" id="notion_url" class="form-control" value="{{ config[4] if config else '' }}">
+  </div>
+
+  <button type="submit" class="btn btn-primary">Save Configuration</button>
+  <a href="/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+</form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const driveToggle = document.getElementById('drive_enabled');
+  const driveSection = document.getElementById('drive_section');
+  const notionToggle = document.getElementById('notion_enabled');
+  const notionSection = document.getElementById('notion_section');
+
+  function toggleSection(toggle, section) {
+    section.style.display = toggle.checked ? 'block' : 'none';
+  }
+
+  toggleSection(driveToggle, driveSection);
+  toggleSection(notionToggle, notionSection);
+
+  driveToggle.addEventListener('change', () => toggleSection(driveToggle, driveSection));
+  notionToggle.addEventListener('change', () => toggleSection(notionToggle, notionSection));
+});
+</script>
+
+{% endblock %}

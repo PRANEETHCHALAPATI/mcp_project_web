@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}MCP Web App{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Consolas&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    body {
+      font-family: 'Consolas', monospace;
+      background-image: url('https://res.cloudinary.com/ddj9g3rhm/image/upload/v1754145315/hexa_dan_wave_04_m8myvb.jpg');
+      background-size: cover;
+      background-attachment: fixed;
+      backdrop-filter: blur(5px);
+      color: #fff;
+    }
+    .blur-bg {
+     background-color: rgba(48, 51, 51, 1);
+      backdrop-filter: blur(5px);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    }
+    .form-control, .btn {
+      font-family: 'Consolas', monospace;
+    }
+    footer {
+      text-align: center;
+      margin-top: 2rem;
+      color: #000000;
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark bg-opacity-75 shadow-sm">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-bold" href="/">MCP AI</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          {% if session['username'] %}
+            <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+            <li class="nav-item"><a class="nav-link" href="/config">Config</a></li>
+            <li class="nav-item"><a class="nav-link" href="/help">Help</a></li>
+            <li class="nav-item"><a class="nav-link text-warning" href="/logout">Logout</a></li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container mt-4 blur-bg">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">{{ message }}</div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </div>
+
+  <footer>&copy; chalapatipraneeth</footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const pwFields = document.querySelectorAll('input[type="password"]');
+      pwFields.forEach(field => {
+        const toggle = document.createElement('span');
+        toggle.className = 'btn btn-sm btn-outline-light ms-2';
+        toggle.innerHTML = '👁️';
+        toggle.style.cursor = 'pointer';
+        toggle.onclick = () => {
+          field.type = field.type === 'password' ? 'text' : 'password';
+        };
+        field.parentNode.appendChild(toggle);
+      });
+    });
+  </script>
+</body>
+</html>
