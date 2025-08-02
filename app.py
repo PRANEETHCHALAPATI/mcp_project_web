@@ -3,6 +3,7 @@ import sqlite3, os
 import traceback
 from utils import run_agent_sync
 
+PORT = int(os.environ.get("PORT", 5000))
 app = Flask(__name__)
 app.secret_key = 'supersecretkey'
 DB_NAME = 'users.db'
