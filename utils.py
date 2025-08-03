@@ -11,7 +11,7 @@ cfg = RunnableConfig(recursion_limit=100)
 
 def initialize_model(google_api_key: str) -> ChatGoogleGenerativeAI:
     return ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",
+        model="gemini-2.5-flash",
         google_api_key=google_api_key
     )
 
