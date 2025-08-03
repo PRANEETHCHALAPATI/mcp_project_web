@@ -11,7 +11,7 @@ cfg = RunnableConfig(recursion_limit=100)
 
 def initialize_model(google_api_key: str) -> ChatGoogleGenerativeAI:
     return ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model="gemini-1.5-flash",
         google_api_key=google_api_key
     )
 
@@ -117,9 +117,10 @@ def run_agent_sync(
             raise
 
     try:
-        return asyncio.run(_run())  # Replaces manual loop management
-    except RuntimeError as e:
-        # Handle "event loop is already running" gracefully
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        return loop.run_until_complete(_run())
+    except RuntimeError:
         import nest_asyncio
         nest_asyncio.apply()
         loop = asyncio.get_event_loop()
