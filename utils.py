@@ -11,7 +11,7 @@ cfg = RunnableConfig(recursion_limit=100)
 
 def initialize_model(google_api_key: str) -> ChatGoogleGenerativeAI:
     return ChatGoogleGenerativeAI(
-        model="gemini-2.5-flash",
+        model="gemini-1.5-flash",
         google_api_key=google_api_key
     )
 
@@ -99,7 +99,17 @@ def run_agent_sync(
                 notion_pipedream_url=notion_pipedream_url,
                 progress_callback=progress_callback
             )
-            learning_path_prompt = "User Goal: " + user_goal + "\n" + user_goal_prompt
+            learning_path_prompt = f"""
+                User Goal: {user_goal}
+
+                Instructions:
+                - Use the YouTube tool to upload the path video or content.
+                - If Google Drive or Notion URLs are provided, use them to store summaries or additional material.
+                - After upload, return a summary of what was uploaded and where.
+
+                Make sure to use these tools explicitly.
+                """ + user_goal_prompt
+
             if progress_callback:
                 progress_callback("Generating your learning path...")
 
