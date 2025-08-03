@@ -88,7 +88,7 @@ def run_agent_sync(
     progress_callback: Optional[Callable[[str], None]] = None
 ) -> dict:
     """
-    Synchronous wrapper for running the agent.
+    Safe sync wrapper for running async code in environments like Render/Gunicorn.
     """
     async def _run():
         try:
@@ -99,31 +99,28 @@ def run_agent_sync(
                 notion_pipedream_url=notion_pipedream_url,
                 progress_callback=progress_callback
             )
-            
-            # Combine user goal with prompt template
             learning_path_prompt = "User Goal: " + user_goal + "\n" + user_goal_prompt
-            
             if progress_callback:
                 progress_callback("Generating your learning path...")
-            
-            # Run the agent
+
             result = await agent.ainvoke(
                 {"messages": [HumanMessage(content=learning_path_prompt)]},
                 config=cfg
             )
-            
+
             if progress_callback:
                 progress_callback("Learning path generation complete!")
-            
+
             return result
         except Exception as e:
             print(f"Error in _run: {str(e)}")
             raise
 
-    # Run in new event loop
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
     try:
+        return asyncio.run(_run())  # Replaces manual loop management
+    except RuntimeError as e:
+        # Handle "event loop is already running" gracefully
+        import nest_asyncio
+        nest_asyncio.apply()
+        loop = asyncio.get_event_loop()
         return loop.run_until_complete(_run())
-    finally:
-        loop.close()
